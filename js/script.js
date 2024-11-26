@@ -3,9 +3,12 @@ const result = document.getElementById('result');
 const restart = document.getElementById('restart');
 const input = document.getElementById('userInput');
 
+
 // PRESIONO ENTER
-input.addEventListener('keydown', () => {
-    ejecutar();
+input.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter') {
+        ejecutar();
+    }
 });
 
 // CLICKO FUERA
@@ -17,16 +20,22 @@ input.addEventListener('blur', () => {
 restart.addEventListener('click', () => {
     // recargar pagina
     location.reload();
-    input.value = 0;
 });
 
-// AL RECARGAR LA PAGINA PONEMOS EL INPUT A 0
+
+
+// -------------------- AL RECARGAR LA PAGINA PONEMOS EL INPUT A 0 --------------------
 window.addEventListener('DOMContentLoaded', () => {
     input.value = 0;
 });
 
-// FUNCION PRINCIPAL DEL JUEGO
+
+
+// -------------------- FUNCION PRINCIPAL DEL JUEGO --------------------
 function ejecutar() {
+    if (input.disabled) return; // evitamos múltiples ejecuciones
+    input.disabled = true;  // desabilitamos input durante el juego
+
     const aleatorio = new Promise((resolve) => {
         setTimeout(() => {
             const aleat = Math.floor(Math.random() * 3) + 1;
@@ -47,19 +56,24 @@ function ejecutar() {
                 mostrarGanador(aleat, input.value);
             }
 
-            if (input.value == aleat) {
+            /* if (input.value == aleat) {
                 clearInterval(interval);
                 mostrarGanador(aleat, input.value);
-            }
+            } */
         }, 1000);
     });
 }
 
 // FUNCION QUE MUESTRA EL GANADOR
-function mostrarGanador(aleat, input) {
-    result.innerHTML = `<p>He pensado en el número: ${aleat} Tu has introducido el número: ${input}</p>
-                        <p>Has perdido!</p>`;
-    console.log('Introducido: ', input);
-    console.log('Pensado: ', aleat);
-    input.disabled = true;
+function mostrarGanador(aleat, inputValor) {
+    if (parseInt(inputValor) === aleat) {
+        result.innerHTML = `
+            <p>He pensado en el número: ${aleat} Tu has introducido el número: ${inputValor}</p>
+                            <p>Has salvado el mundo !</p>`;
+    } else {
+        result.innerHTML = `
+            <p>He pensado en el número: ${aleat} Tu has introducido el número: ${inputValor}</p>
+                            <p>Has perdido, prueba otra vez.</p>`;
+    }
+
 };

@@ -6,14 +6,16 @@ const input = document.getElementById('userInput');
 
 // PRESIONO ENTER
 input.addEventListener('keydown', (event) => {
-    if(event.key === 'Enter') {
+    if(event.key === 'Enter' && input.value > 0) {
         ejecutar();
     }
 });
 
 // CLICKO FUERA
 input.addEventListener('blur', () => {
-    ejecutar();
+    if (input.value > 0) {
+        ejecutar();
+    }
 });
 
 // REINICIO JUEGO
@@ -33,7 +35,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // -------------------- FUNCION PRINCIPAL DEL JUEGO --------------------
 function ejecutar() {
-    if (input.disabled) return; // evitamos múltiples ejecuciones
+    if (input.disabled) return; // evitamos múltiples ejecuciones. detenemos la ejecucion de la función
     input.disabled = true;  // desabilitamos input durante el juego
 
     const aleatorio = new Promise((resolve) => {
@@ -55,11 +57,6 @@ function ejecutar() {
                 clearInterval(interval);
                 mostrarGanador(aleat, input.value);
             }
-
-            /* if (input.value == aleat) {
-                clearInterval(interval);
-                mostrarGanador(aleat, input.value);
-            } */
         }, 1000);
     });
 }
